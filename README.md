@@ -54,6 +54,9 @@ npm run start
 - `POST /api/v1/group` - Create a new group.
 - `GET /api/v1/group/:id` - Get group by ID.
 
+### Expense
+- `POST /api/v1/expense` - Add a new expense to a group.
+
 ## Notes
 
 - The JWT token is set as an HTTP-only cookie named `token` during login.
