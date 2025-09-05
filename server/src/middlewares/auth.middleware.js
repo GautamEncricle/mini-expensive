@@ -2,7 +2,6 @@ import jwt from "jsonwebtoken";
 import User from "../models/User.js";
 import catchAsync from "../utils/catchAsync.js";
 import AppError from "../utils/AppError.js";
-import HTTP_STATUS from "../constants/HttpStatus.js";
 
 const JWT_SECRET = process.env.JWT_SECRET || "jsonsecretkey";
 
@@ -15,12 +14,12 @@ export const isAuthenticated = catchAsync(async (req, res, next) => {
   } else if (req.cookies && req.cookies.token) {
     token = req.cookies.token;
   } else {
-    throw new AppError("UNAUTHORIZE", HTTP_STATUS.UNAUTHORIZED);
+    throw new AppError("UNAUTHORIZE", 401);
   }
 
   const decoded = jwt.verify(token, JWT_SECRET);
   const user = await User.findById(decoded.id).select("-password");
-  if (!user) throw new AppError("User not found", HTTP_STATUS.NOT_FOUND);
+  if (!user) throw new AppError("User not found", 404);
 
   req.user = user;
   next();

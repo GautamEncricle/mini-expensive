@@ -1,16 +1,18 @@
 import express from 'express'
-import { register, login } from '../../controllers/auth.controller.js'
-import { getUser } from '../../utils/getUserByRequest'
+import {
+  register,
+  login,
+  fetchAllUsers,
+} from '../../controllers/auth.controller.js'
+import { isAuthenticated } from '../../middlewares/auth.middleware.js'
 
 const router = express.Router()
 
 router.post('/register', register)
 router.post('/login', login)
-router.get('/me', getUser, (req, res) => {
-  res.status(200).json({
-    status: 'success',
-    user: req.user,
-  })
+router.get('/users', isAuthenticated, fetchAllUsers)
+router.get('/me', isAuthenticated, (req, res) => {
+  res.status(200).json({ user: req.user })
 })
 
 export default router

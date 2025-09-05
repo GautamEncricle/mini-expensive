@@ -1,10 +1,12 @@
 import React from 'react'
 import { useState } from 'react'
 import axiosInstance from '../api/axios'
+import { useNavigate } from 'react-router-dom'
 
 function Login() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const navigate = useNavigate()
 
   const handleEmailChange = (event) => {
     setEmail(event.target.value)
@@ -22,8 +24,11 @@ function Login() {
         password,
       })
       console.log('Login successful:', response.data)
+      localStorage.setItem('token', response.data.token)
+      navigate('/groups')
     } catch (error) {
       console.error('Login failed:', error)
+      alert('Login failed: ' + (error.response?.data?.message || error.message))
     }
   }
 

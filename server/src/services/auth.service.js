@@ -8,7 +8,11 @@ export const signup = async ({ name, email, password }) => {
   const existingUser = await User.findOne({ email })
   if (existingUser) throw new AppError('Email already in use', 400)
   const user = await User.create({ name, email, password })
-  return user
+  const token = jwt.sign({ id: user._id }, JWT_SECRET, {
+    expiresIn: process.env.JSON_EXPIRE || '1d',
+  })
+
+  return token
 }
 
 export const login = async ({ email, password }) => {
@@ -16,8 +20,13 @@ export const login = async ({ email, password }) => {
   if (!user || !(await user.comparePassword(password))) {
     throw new AppError('Invalid credentials', 401)
   }
-  const token = jwt.sign({ id: user._id, role: user.role }, JWT_SECRET, {
+  const token = jwt.sign({ id: user._id }, JWT_SECRET, {
     expiresIn: process.env.JSON_EXPIRE || '1d',
   })
   return token
+}
+
+export const getAllUsers = async () => {
+  const users = await User.find().select('-password')
+  return users
 }

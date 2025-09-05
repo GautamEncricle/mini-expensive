@@ -14,3 +14,14 @@ export const getGroupById = catchAsync(async (groupId) => {
   }
   return group
 })
+
+export const getGroupByUserId = catchAsync(async (userId) => {
+  console.log('Fetching groups for user ID:', userId) // Debugging line
+  const groups = await Group.find({ members: userId }).populate(
+    'members',
+    'name email'
+  )
+  console.log('Groups found:', groups) // Debugging line
+  console.log('Groups List ', groups)
+  return groups || []
+})

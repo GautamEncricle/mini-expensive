@@ -1,13 +1,9 @@
 import './App.css'
-import { Routes, Route } from "react-router-dom"
-import Login from './pages/Login'
+import AppRouter from './routes/AppRouter'
 
 function App() {
   return (
-      <Routes>
-        <Route path="/" element={<Login />} />
-        <Route path="/register" element={<h1>Register</h1>} />
-      </Routes>
+    <AppRouter />
   )
 }
 
